@@ -7,13 +7,13 @@
  **/
 package com.wp.gmall.user.service.impl;
 
+import com.alibaba.dubbo.config.annotation.Service;
 import com.wp.gmall.beans.UmsMember;
 import com.wp.gmall.beans.UmsMemberReceiveAddress;
+import com.wp.gmall.service.UserService;
 import com.wp.gmall.user.mapper.AddressMapper;
 import com.wp.gmall.user.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.wp.gmall.service.UserService;
-import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;

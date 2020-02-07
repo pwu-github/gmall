@@ -1,3 +1,4 @@
 # gmall
 
-gmall-user serer-port:8080
+gmall-user-service serer-port:8070
+gmall-user-web server-port:8080

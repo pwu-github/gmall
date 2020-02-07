@@ -4,14 +4,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.wp.gmall</groupId>
-		<version>1.0-SNAPSHOT</version>
 		<artifactId>gmall-parent</artifactId>
+		<version>1.0-SNAPSHOT</version>
 	</parent>
 
 	<groupId>com.wp.gmall</groupId>
-	<artifactId>gmall-user</artifactId>
+	<artifactId>gmall-user-web</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>gmall-user</name>
+	<name>gmall-user-web</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
@@ -19,25 +19,17 @@
 	</properties>
 
 	<dependencies>
-
-		<dependency>
-			<groupId>com.wp.gmall</groupId>
-			<artifactId>gmall-api</artifactId>
-			<version>1.0-SNAPSHOT</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.wp.gmall</groupId>
-			<artifactId>gmall-service-util</artifactId>
-			<version>1.0-SNAPSHOT</version>
-		</dependency>
-
 		<dependency>
 			<groupId>com.wp.gmall</groupId>
 			<artifactId>gmall-web-util</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.wp.gmall</groupId>
+			<artifactId>gmall-api</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<build>
