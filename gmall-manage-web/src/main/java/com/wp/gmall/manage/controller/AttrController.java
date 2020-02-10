@@ -10,6 +10,7 @@ package com.wp.gmall.manage.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.wp.gmall.beans.PmsBaseAttrInfo;
 import com.wp.gmall.beans.PmsBaseAttrValue;
+import com.wp.gmall.beans.PmsBaseSaleAttr;
 import com.wp.gmall.service.AttrService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -49,6 +50,14 @@ public class AttrController {
     public List<PmsBaseAttrValue> getAttrValueList(String attrId){
         List<PmsBaseAttrValue> pmsBaseAttrValues = attrService.getAttrValueList(attrId);
         return pmsBaseAttrValues;
+    }
+
+    //获得基础销售属性
+    @RequestMapping("/baseSaleAttrList")
+    @ResponseBody
+    public List<PmsBaseSaleAttr> baseSaleAttrList(){
+        List<PmsBaseSaleAttr> pmsBaseSaleAttrs = attrService.baseSaleAttrList();
+        return pmsBaseSaleAttrs;
     }
 
 }

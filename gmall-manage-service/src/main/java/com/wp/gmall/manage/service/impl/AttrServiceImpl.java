@@ -10,8 +10,10 @@ package com.wp.gmall.manage.service.impl;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.wp.gmall.beans.PmsBaseAttrInfo;
 import com.wp.gmall.beans.PmsBaseAttrValue;
+import com.wp.gmall.beans.PmsBaseSaleAttr;
 import com.wp.gmall.manage.mapper.PmsBaseAttrInfoMapper;
 import com.wp.gmall.manage.mapper.PmsBaseAttrValueMapper;
+import com.wp.gmall.manage.mapper.PmsBaseSaleAttrMapper;
 import com.wp.gmall.service.AttrService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,8 @@ public class AttrServiceImpl implements AttrService {
     private PmsBaseAttrInfoMapper pmsBaseAttrInfoMapper;
     @Autowired
     private PmsBaseAttrValueMapper pmsBaseAttrValueMapper;
+    @Autowired
+    private PmsBaseSaleAttrMapper pmsBaseSaleAttrMapper;
 
     //根据三级分类查询属性信息
     @Override
@@ -80,5 +84,11 @@ public class AttrServiceImpl implements AttrService {
         pmsBaseAttrValue.setAttrId(attrId);
         List<PmsBaseAttrValue> attrValues = pmsBaseAttrValueMapper.select(pmsBaseAttrValue);
         return attrValues;
+    }
+
+    //获得基础销售属性
+    @Override
+    public List<PmsBaseSaleAttr> baseSaleAttrList() {
+        return pmsBaseSaleAttrMapper.selectAll();
     }
 }
