@@ -25,10 +25,11 @@ service zookeeper restart
 2、Tomcat 连接失败，没有开启8080端口
 3、zookeeper连接失败，没有开启2181端口
 检查端口是否开放：https://www.cnblogs.com/sxmny/p/11224842.html
-开放端口：firewall-cmd --zone=public --add-port=6379/tcp --permanent
+开放端口：firewall-cmd --zone=public --add-port=9200/tcp --permanent
 重启防火墙：firewall-cmd --reload
 
 #redis(https://blog.csdn.net/weixin_38091140/article/details/91472362)
+redis命令参考：http://redisdoc.com/
 1、cd /opt/redis-3.0.4/src
 redis-server
 这种启动方式需要一直打开窗口，不能进行其他操作，不太方便
@@ -43,6 +44,12 @@ redis-cli -h 192.168.253.131 -p 6379
 keys *  //查看redis中的key
 get key  //获得key对应的数据
 
+#es
+1、启动es
+cd /opt/es/elasticsearch-6.3.1/bin
+./elasticsearch
+2、es访问
+http://192.168.253.131:9200/
 
 
 #常见的错误
