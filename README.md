@@ -17,16 +17,33 @@ SOA架构(面向服务架构)
 2、gmall-item-web      serer-port:8082
 
 #注册中心
-dubbo管理页面: http://192.168.253.131:8080/     user/pass : root/root
-1、启动dubbo和zookeeper服务：
+dubbo管理页面: http://192.168.253.131:8080/dubbo     user/pass : root/root
+1、启动dubbo和zookeeper服务(已经设置为开机自启，如果服务启动失败，需要手动启动)：
 cd /etc/init.d 
 service dubbo-admin start
 service zookeeper restart
 2、Tomcat 连接失败，没有开启8080端口
 3、zookeeper连接失败，没有开启2181端口
 检查端口是否开放：https://www.cnblogs.com/sxmny/p/11224842.html
-开放端口：firewall-cmd --zone=public --add-port=8080/tcp --permanent
+开放端口：firewall-cmd --zone=public --add-port=6379/tcp --permanent
 重启防火墙：firewall-cmd --reload
+
+#redis(https://blog.csdn.net/weixin_38091140/article/details/91472362)
+1、cd /opt/redis-3.0.4/src
+redis-server
+这种启动方式需要一直打开窗口，不能进行其他操作，不太方便
+2、后台进程的方式启动redis
+vim redis.conf
+将 daemonize no 改为 daemonize yes
+./redis-server /opt/redis-3.0.4/redis.conf
+3、设置Redis开机自启
+https://blog.csdn.net/Super_RD/article/details/89713996
+4、连接Redis
+redis-cli -h 192.168.253.131 -p 6379
+keys *  //查看redis中的key
+get key  //获得key对应的数据
+
+
 
 #常见的错误
 1、serviceImpl没有加@Service注解（dubbo包）
