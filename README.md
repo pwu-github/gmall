@@ -16,6 +16,10 @@ SOA架构(面向服务架构)
 (商品详情页的数据通过spuService和skuService就可以获取，也就是说gmall-manage-service就可以实现,这也是为什么要服务拆分，面向服务)
 2、gmall-item-web      serer-port:8082
 
+#搜索模块
+1、gmall-search-service  server-port：8073
+2、gmall-search-web      server-port：8083
+
 #注册中心
 dubbo管理页面: http://192.168.253.131:8080/dubbo     user/pass : root/root
 1、启动dubbo和zookeeper服务(已经设置为开机自启，如果服务启动失败，需要手动启动)：
@@ -60,6 +64,57 @@ nohup ./kibana &
 ps -ef | grep node
 
 
+#存储sku信息
+http://192.168.253.131:5601/app/kibana#/dev_tools/console?_g=()
+`PUT gmall
+ {
+   "mappings": {
+     "PmsSkuInfo":{
+       "properties": {
+         "id":{
+           "type": "keyword",
+           "index": false
+         },
+         "skuName":{
+           "type": "text",
+           "analyzer": "ik_max_word"
+         },
+         "skuDesc":{
+           "type": "text",
+           "analyzer": "ik_smart"
+         },
+         "catalog3Id":{
+           "type": "keyword"
+         },
+         "price":{
+           "type": "double"
+         },
+         "skuDefaultImg":{
+           "type": "keyword",
+           "index": false
+         },
+         "hotScore":{
+           "type": "double"
+         },
+         "productId":{
+           "type": "keyword"
+         },
+         "skuAttrValueList":{
+           "properties": {
+             "attrId":{
+               "type": "keyword"
+             },
+             "valueId":{
+               "type": "keyword"
+             }
+           }
+         }
+       }
+     }
+   }
+ }
+`
+
 #常见的错误
 1、serviceImpl没有加@Service注解（dubbo包）
 2、主方法没有加@MapperScan 注解（dubbo包）
@@ -68,6 +123,23 @@ ps -ef | grep node
 检查端口是否开放：https://www.cnblogs.com/sxmny/p/11224842.html
 开放端口：firewall-cmd --zone=public --add-port=5601/tcp --permanent
 重启防火墙：firewall-cmd --reload
+5、如果遇到thymeleaf解析HTML问题，可在pom文件中加入如下依赖，并在properties配置文件中加入
+spring.thymeleaf.mode=LEGACYHTML5，目的是为了让springboot的thymeleaf在解析HTML时没有那么严格
+<dependency>
+     <groupId>net.sourceforge.nekohtml</groupId>
+     <artifactId>nekohtml</artifactId>
+ </dependency>
+ 
+ <dependency>
+     <groupId>xml-apis</groupId>
+     <artifactId>xml-apis</artifactId>
+ </dependency>
+ 
+ <dependency>
+ 	<groupId>org.apache.xmlgraphics</groupId>
+ 	<artifactId>batik-ext</artifactId>
+ </dependency>
+
 
 
 
