@@ -13,7 +13,7 @@ import java.util.List;
 public class PmsSearchParam implements Serializable{
     private String catalog3Id;
     private String keyword;
-    private List<PmsSkuAttrValue> pmsSkuAttrValues;
+    private String[] valueId;
 
     public String getCatalog3Id() {
         return catalog3Id;
@@ -31,11 +31,11 @@ public class PmsSearchParam implements Serializable{
         this.keyword = keyword;
     }
 
-    public List<PmsSkuAttrValue> getPmsSkuAttrValues() {
-        return pmsSkuAttrValues;
+    public String[] getValueId() {
+        return valueId;
     }
 
-    public void setPmsSkuAttrValues(List<PmsSkuAttrValue> pmsSkuAttrValues) {
-        this.pmsSkuAttrValues = pmsSkuAttrValues;
+    public void setValueId(String[] valueId) {
+        this.valueId = valueId;
     }
 }
