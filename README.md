@@ -128,10 +128,17 @@ http://192.168.253.131:5601/app/kibana#/dev_tools/console?_g=()
  }
 `
 
+#配置本地域名解析
+将127.0.0.1 localhost 映射为指定的域名
+打开C:\Windows\System32\drivers\etc 下的hosts文件
+如下配置即可： 127.0.0.1      localhost   user.gmall.com
+配置成功，即可用 user.gmall.com:port 访问本地启动的服务
+可以进一步用Nginx代理端口号，实现用user.gmall.com直接访问
+
 #常见的错误
 1、serviceImpl没有加@Service注解（dubbo包）
 2、主方法没有加@MapperScan 注解（dubbo包）
-3、controller 没有加@CrossOrigin注解（dubbo包），注入时用@Reference注解（dubbo包）。
+3、controller 没有加@CrossOrigin注解，注入时用@Reference注解（dubbo包）。
 4、端口没有开放
 检查端口是否开放：https://www.cnblogs.com/sxmny/p/11224842.html
 开放端口：firewall-cmd --zone=public --add-port=5601/tcp --permanent

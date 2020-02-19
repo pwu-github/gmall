@@ -36,9 +36,18 @@ public class CartController {
     @Reference
     private CartService cartService;
 
+    //结算 测试
+    @RequestMapping("/toTrade")
+    public String toTrade(HttpServletRequest request, ModelMap modelMap) {
+
+        String memberId = (String) request.getAttribute("memberId");
+        String nickname = (String) request.getAttribute("nickname");
+        return "toTrade";
+    }
+
     //购物车列表
     @RequestMapping("/cartList")
-    public String cartList(HttpServletRequest request,ModelMap modelMap) {
+    public String cartList(HttpServletRequest request, ModelMap modelMap) {
         List<OmsCartItem> omsCartItems = new ArrayList<>();
         String memberId = "1";
         if (StringUtils.isNotBlank(memberId)) {
@@ -47,8 +56,8 @@ public class CartController {
         } else {
             //如果没有登陆，查询cookie
             String cartListCookie = CookieUtil.getCookieValue(request, "cartListCookie", true);
-            if(StringUtils.isNotBlank(cartListCookie)){
-                omsCartItems = JSON.parseArray(cartListCookie,OmsCartItem.class);
+            if (StringUtils.isNotBlank(cartListCookie)) {
+                omsCartItems = JSON.parseArray(cartListCookie, OmsCartItem.class);
             }
         }
 
@@ -58,7 +67,7 @@ public class CartController {
         modelMap.put("cartList", omsCartItems);
         //计算勾选商品的总价格
         BigDecimal totalAmount = getTotalAmount(omsCartItems);
-        modelMap.put("totalAmount",totalAmount);
+        modelMap.put("totalAmount", totalAmount);
         return "cartList";
     }
 
@@ -67,7 +76,7 @@ public class CartController {
         for (OmsCartItem omsCartItem : omsCartItems) {
             BigDecimal totalPrice = omsCartItem.getTotalPrice();
             //当被选中时，才计算到总价中
-            if(omsCartItem.getIsChecked().equals("1")){
+            if (omsCartItem.getIsChecked().equals("1")) {
                 totalAmount = totalAmount.add(totalPrice);
             }
         }
@@ -75,7 +84,7 @@ public class CartController {
     }
 
     @RequestMapping("/checkCart")
-    public String checkCart(String isChecked,String skuId,ModelMap modelMap){
+    public String checkCart(String isChecked, String skuId, ModelMap modelMap) {
         String memberId = "1";
         //修改状态
         OmsCartItem omsCartItem = new OmsCartItem();
@@ -85,10 +94,10 @@ public class CartController {
         cartService.checkCart(omsCartItem);
         //查询最新数据，渲染内嵌页面
         List<OmsCartItem> omsCartItems = cartService.cartList(memberId);
-        modelMap.put("cartList",omsCartItems);
+        modelMap.put("cartList", omsCartItems);
         //计算勾选商品的总价格
         BigDecimal totalAmount = getTotalAmount(omsCartItems);
-        modelMap.put("totalAmount",totalAmount);
+        modelMap.put("totalAmount", totalAmount);
         return "cartListInner";
     }
 

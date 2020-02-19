@@ -14,14 +14,13 @@ import com.wp.gmall.beans.PmsBaseCatalog3;
 import com.wp.gmall.service.CatalogService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
 @Controller
-@CrossOrigin  //跨域请求注解，service和 web（controller）的IP和端口不一致，会导致数据传输 互相不人心，从而导致数据传输与有 问题
+@CrossOrigin  //跨域请求注解，service和 web（controller）的IP和端口不一致，会导致数据传输 互相不信任，从而导致数据传输与有 问题
 public class CatalogController {
 
     @Reference
