@@ -30,7 +30,7 @@ public class GmallSearchServiceApplicationTests {
 	@Test
 	public void test() throws Exception {
 
-
+        put();
 	}
 
 	public void put() throws Exception {

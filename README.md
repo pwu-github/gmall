@@ -20,6 +20,14 @@ SOA架构(面向服务架构)
 1、gmall-search-service  server-port：8073
 2、gmall-search-web      server-port：8083
 
+#购物车模块
+1、gmall-cart-service    server-port：8074
+2、gmall-cart-web        server-port：8084
+
+#用户认证中心服务
+1、gmall-passport-service server-port：8075 (实际上不需要这个模块，用gmall-user-service即可)
+2、gmall-passport-web     server-port：8085
+
 #注册中心
 dubbo管理页面: http://192.168.253.131:8080/dubbo     user/pass : root/root
 1、启动dubbo和zookeeper服务(已经设置为开机自启，如果服务启动失败，需要手动启动)：
@@ -42,6 +50,11 @@ https://blog.csdn.net/Super_RD/article/details/89713996
 redis-cli -h 192.168.253.131 -p 6379
 keys *  //查看redis中的key
 get key  //获得key对应的数据
+5、获取hash结构的value
+hvals user:1:cart
+6、查询hash结构的value中的value
+hget user:1:cart 107
+
 
 #es
 1、启动es
@@ -139,8 +152,8 @@ spring.thymeleaf.mode=LEGACYHTML5，目的是为了让springboot的thymeleaf在�
  	<groupId>org.apache.xmlgraphics</groupId>
  	<artifactId>batik-ext</artifactId>
  </dependency>
-
-
+6、如果启动服务时，只能启动一个，并且报了dubbo端口号绑定类似的错误，就在properties文件中配置dubbo协议之间的通讯端口号，自己任意配置
+spring.dubbo.protocol.port=20881
 
 
 
