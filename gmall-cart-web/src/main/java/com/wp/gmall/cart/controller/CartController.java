@@ -9,6 +9,7 @@ package com.wp.gmall.cart.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
+import com.wp.gmall.annotations.LoginRequired;
 import com.wp.gmall.beans.OmsCartItem;
 import com.wp.gmall.beans.PmsSkuInfo;
 import com.wp.gmall.service.CartService;
@@ -38,6 +39,7 @@ public class CartController {
 
     //结算 测试
     @RequestMapping("/toTrade")
+    @LoginRequired(loginSuccess = true)
     public String toTrade(HttpServletRequest request, ModelMap modelMap) {
 
         String memberId = (String) request.getAttribute("memberId");
@@ -47,9 +49,11 @@ public class CartController {
 
     //购物车列表
     @RequestMapping("/cartList")
+    @LoginRequired(loginSuccess = false)
     public String cartList(HttpServletRequest request, ModelMap modelMap) {
         List<OmsCartItem> omsCartItems = new ArrayList<>();
-        String memberId = "1";
+        String memberId = (String) request.getAttribute("memberId");
+        String nickname = (String) request.getAttribute("nickname");
         if (StringUtils.isNotBlank(memberId)) {
             //如果已经登录，查询数据库
             omsCartItems = cartService.cartList(memberId);
@@ -84,8 +88,10 @@ public class CartController {
     }
 
     @RequestMapping("/checkCart")
-    public String checkCart(String isChecked, String skuId, ModelMap modelMap) {
-        String memberId = "1";
+    @LoginRequired(loginSuccess = false)
+    public String checkCart(String isChecked, String skuId, ModelMap modelMap,HttpServletRequest request) {
+        String memberId = (String) request.getAttribute("memberId");
+        String nickname = (String) request.getAttribute("nickname");
         //修改状态
         OmsCartItem omsCartItem = new OmsCartItem();
         omsCartItem.setProductSkuId(skuId);
@@ -103,6 +109,7 @@ public class CartController {
 
     //添加购物车，页面传递skuId和quantity
     @RequestMapping("/addToCart")
+    @LoginRequired(loginSuccess = false)
     public String addToCart(String skuId, int quantity, HttpServletRequest request, HttpServletResponse response) {
         List<OmsCartItem> omsCartItems = new ArrayList<>();
         //查询商品信息
@@ -121,7 +128,8 @@ public class CartController {
         omsCartItem.setProductSkuId(skuId);
         omsCartItem.setQuantity(new BigDecimal(quantity));
         //判断用户是否登录
-        String memberId = "1";
+        String memberId = (String) request.getAttribute("memberId");
+        String nickname = (String) request.getAttribute("nickname");
         if (StringUtils.isBlank(memberId)) {
             //用户未登录，购物车数据存放在cookie中
             //cookie中原有的数据

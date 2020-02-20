@@ -7,13 +7,17 @@
  **/
 package com.wp.gmall.user.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.wp.gmall.beans.UmsMember;
 import com.wp.gmall.beans.UmsMemberReceiveAddress;
 import com.wp.gmall.user.mapper.AddressMapper;
 import com.wp.gmall.user.mapper.UserMapper;
+import com.wp.gmall.util.RedisUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.wp.gmall.service.UserService;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.Jedis;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -25,6 +29,8 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
     @Autowired
     private AddressMapper addressMapper;
+    @Autowired
+    private RedisUtil redisUtil;
 
     @Override
     public List<UmsMember> getAllUser() {
@@ -37,7 +43,7 @@ public class UserServiceImpl implements UserService {
     public List<UmsMemberReceiveAddress> getAddressByUserId(String userId) {
         Example example = new Example(UmsMemberReceiveAddress.class);
         //memberId是UmsMemberReceiveAddress表的外键字段
-        example.createCriteria().andEqualTo("memberId",userId);
+        example.createCriteria().andEqualTo("memberId", userId);
         List<UmsMemberReceiveAddress> addresses = addressMapper.selectByExample(example);
         return addresses;
 
@@ -47,5 +53,40 @@ public class UserServiceImpl implements UserService {
 //        List<UmsMemberReceiveAddress> addresses = addressMapper.select(address);
 
 
+    }
+
+    @Override
+    public UmsMember login(UmsMember umsMember) {
+        Jedis jedis = null;
+        try {
+            jedis = redisUtil.getJedis();
+            if (jedis != null) {
+                //从缓存中获取用户信息，根据密码对应用户信息
+                String umsMemberStr = jedis.get("user:" + umsMember.getPassword() + ":info");
+                if (StringUtils.isNotBlank(umsMemberStr)) {
+                    //密码正确，解析成UmsMember对象
+                    UmsMember umsMember1 = JSON.parseObject(umsMemberStr, UmsMember.class);
+                    return umsMember1;
+                }
+            }
+            //密码错误
+            //缓存中没有或连接缓存失败，查询数据库，并刷新缓存
+            UmsMember umsMember2 = loginFromDB(umsMember);
+            if (umsMember2 != null) {
+                jedis.setex("user:" + umsMember.getPassword() + ":info", 60 * 60 & 24, JSON.toJSONString(umsMember2));
+            }
+            return umsMember2;
+        } finally {
+            jedis.close();
+        }
+    }
+
+    private UmsMember loginFromDB(UmsMember umsMember) {
+
+        List<UmsMember> umsMembers = userMapper.select(umsMember);
+        if(umsMembers != null){
+            return umsMembers.get(0);
+        }
+        return null;
     }
 }

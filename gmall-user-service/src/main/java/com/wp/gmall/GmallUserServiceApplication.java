@@ -1,4 +1,4 @@
-package com.wp.gmall.user;
+package com.wp.gmall;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

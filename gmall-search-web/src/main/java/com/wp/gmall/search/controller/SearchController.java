@@ -8,6 +8,7 @@
 package com.wp.gmall.search.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.wp.gmall.annotations.LoginRequired;
 import com.wp.gmall.beans.*;
 import com.wp.gmall.service.AttrService;
 import com.wp.gmall.service.SearchService;
@@ -22,7 +23,7 @@ import java.util.*;
 
 @Controller
 @CrossOrigin
-public class SerachController {
+public class SearchController {
 
     @Reference
     private SearchService searchService;
@@ -146,6 +147,7 @@ public class SerachController {
     }
 
     @RequestMapping("/index")
+    @LoginRequired(loginSuccess = false)
     public String index() {
         return "index";
     }

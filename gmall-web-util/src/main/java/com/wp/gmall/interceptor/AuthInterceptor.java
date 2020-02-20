@@ -1,5 +1,6 @@
 package com.wp.gmall.interceptor;
 
+import com.alibaba.fastjson.JSON;
 import com.wp.gmall.annotations.LoginRequired;
 import com.wp.gmall.util.CookieUtil;
 import com.wp.gmall.util.HttpclientUtil;
@@ -11,6 +12,8 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class AuthInterceptor extends HandlerInterceptorAdapter {
@@ -46,30 +49,44 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         boolean loginSuccess = methodAnnotation.loginSuccess();
         //认证中心认证
         String success = "fail";
-        if(StringUtils.isNotBlank(token)){
-            success = HttpclientUtil.doGet("http://localhost:8085/verify?token=" + token);
+        Map<String, String> successMap = new HashMap<>();
+        if (StringUtils.isNotBlank(token)) {
+            String ip = request.getHeader("x-forwarded-for"); //nginx转发的客户端IP
+            if (StringUtils.isBlank(ip)) {
+                ip = request.getRemoteAddr();
+                if (StringUtils.isBlank(ip)) {
+                    ip = "127.0.0.1";  //此处理论上要处理异常，不是写定
+                }
+            }
+            String successJson = HttpclientUtil.doGet("http://localhost:8085/verify?token=" + token+"&currentIp="+ip);
+            successMap = JSON.parseObject(successJson, Map.class);
+            success = successMap.get("status");
         }
         if (loginSuccess) {
             //需要登陆成功才可以进行下一步操作
             if (!success.equals("success")) {
                 //登陆失败，重定向回到认证中心
                 StringBuffer requestURL = request.getRequestURL();
-                response.sendRedirect("http://localhost:8085/index?ReturnUrl="+requestURL);
+                response.sendRedirect("http://localhost:8085/index?ReturnUrl=" + requestURL);
                 return false;
             }
             //登陆成功，覆盖cookie中的token
-            request.setAttribute("memberId", "1");
-            request.setAttribute("nickname", "hahahah");
+            request.setAttribute("memberId", successMap.get("memberId"));
+            request.setAttribute("nickname", successMap.get("nickname"));
+            if (StringUtils.isNotBlank(token)) {
+                //验证通过，覆盖cookie中的token值
+                CookieUtil.setCookie(request, response, "oldToken", token, 60 * 60 * 2, true);
+            }
         } else {
             //不需要必须登录成功，就可以进入下一步操作
             if (success.equals("success")) {
-                request.setAttribute("memberId", "1");
-                request.setAttribute("nickname", "hahahah");
+                request.setAttribute("memberId", successMap.get("memberId"));
+                request.setAttribute("nickname", successMap.get("nickname"));
+                if (StringUtils.isNotBlank(token)) {
+                    //验证通过，覆盖cookie中的token值
+                    CookieUtil.setCookie(request, response, "oldToken", token, 60 * 60 * 2, true);
+                }
             }
-        }
-        if(StringUtils.isNotBlank(token)){
-            //验证通过，覆盖cookie中的token值
-            CookieUtil.setCookie(request,response,"oldToken",token,60*60*2,true);
         }
         return true;
     }
