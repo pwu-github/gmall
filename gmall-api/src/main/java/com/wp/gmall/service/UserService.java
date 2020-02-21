@@ -15,4 +15,8 @@ public interface UserService {
     UmsMember login(UmsMember umsMember);
 
     void addUserToken(String token, String memberId);
+
+    void addAuthoUser(UmsMember umsMember);
+
+    UmsMember checkAutho2User(UmsMember umsMember);
 }

@@ -58,7 +58,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
                     ip = "127.0.0.1";  //此处理论上要处理异常，不是写定
                 }
             }
-            String successJson = HttpclientUtil.doGet("http://localhost:8085/verify?token=" + token+"&currentIp="+ip);
+            String successJson = HttpclientUtil.doGet("http://passport.gmall.com:8085/verify?token=" + token+"&currentIp="+ip);
             successMap = JSON.parseObject(successJson, Map.class);
             success = successMap.get("status");
         }
@@ -67,7 +67,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
             if (!success.equals("success")) {
                 //登陆失败，重定向回到认证中心
                 StringBuffer requestURL = request.getRequestURL();
-                response.sendRedirect("http://localhost:8085/index?ReturnUrl=" + requestURL);
+                response.sendRedirect("http://passport.gmall.com/index?ReturnUrl=" + requestURL);
                 return false;
             }
             //登陆成功，覆盖cookie中的token

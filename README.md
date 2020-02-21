@@ -139,10 +139,12 @@ http://192.168.253.131:5601/app/kibana#/dev_tools/console?_g=()
 1、serviceImpl没有加@Service注解（dubbo包）
 2、主方法没有加@MapperScan 注解（dubbo包）
 3、controller 没有加@CrossOrigin注解，注入时用@Reference注解（dubbo包）。
+
 4、端口没有开放
 检查端口是否开放：https://www.cnblogs.com/sxmny/p/11224842.html
 开放端口：firewall-cmd --zone=public --add-port=5601/tcp --permanent
 重启防火墙：firewall-cmd --reload
+
 5、如果遇到thymeleaf解析HTML问题，可在pom文件中加入如下依赖，并在properties配置文件中加入
 spring.thymeleaf.mode=LEGACYHTML5，目的是为了让springboot的thymeleaf在解析HTML时没有那么严格
 <dependency>
@@ -159,8 +161,13 @@ spring.thymeleaf.mode=LEGACYHTML5，目的是为了让springboot的thymeleaf在�
  	<groupId>org.apache.xmlgraphics</groupId>
  	<artifactId>batik-ext</artifactId>
  </dependency>
+ 
 6、如果启动服务时，只能启动一个，并且报了dubbo端口号绑定类似的错误，就在properties文件中配置dubbo协议之间的通讯端口号，自己任意配置
 spring.dubbo.protocol.port=20881
+
+7、解决request.getRemoteAddr()获取的值为0:0:0:0:0:0:0:1这个小问题
+https://www.cnblogs.com/qrlozte/p/3532540.html
+打开C:\Windows\System32\drivers\etc 下的hosts文件,注释掉  #	::1  localhost。如果还是不行，就不用localhost，用127.0.0.1访问，或者用域名访问
 
 
 
