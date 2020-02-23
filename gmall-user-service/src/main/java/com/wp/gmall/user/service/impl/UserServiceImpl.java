@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
             jedis = redisUtil.getJedis();
             if (jedis != null) {
                 //从缓存中获取用户信息，根据密码对应用户信息
-                String umsMemberStr = jedis.get("user:" + umsMember.getPassword() + ":info");
+                String umsMemberStr = jedis.get("user:" + umsMember.getPassword() + umsMember.getUsername()+":info");
                 if (StringUtils.isNotBlank(umsMemberStr)) {
                     //密码正确，解析成UmsMember对象
                     UmsMember umsMember1 = JSON.parseObject(umsMemberStr, UmsMember.class);
@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
             //缓存中没有或连接缓存失败，查询数据库，并刷新缓存
             UmsMember umsMember2 = loginFromDB(umsMember);
             if (umsMember2 != null) {
-                jedis.setex("user:" + umsMember.getPassword() + ":info", 60 * 60 * 24, JSON.toJSONString(umsMember2));
+                jedis.setex("user:" + umsMember.getPassword() + umsMember.getUsername()+":info", 60 * 60 * 24, JSON.toJSONString(umsMember2));
             }
             return umsMember2;
         } finally {
@@ -88,14 +88,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addAuthoUser(UmsMember umsMember) {
+    public UmsMember addAuthoUser(UmsMember umsMember) {
         userMapper.insertSelective(umsMember);
+        return umsMember;
     }
 
     @Override
     public UmsMember checkAutho2User(UmsMember umsMember) {
         UmsMember umsMember1 = userMapper.selectOne(umsMember);
         return umsMember1;
+    }
+
+    @Override
+    public UmsMemberReceiveAddress getAddressById(String addressId) {
+        UmsMemberReceiveAddress umsMemberReceiveAddress = new UmsMemberReceiveAddress();
+        umsMemberReceiveAddress.setId(addressId);
+        UmsMemberReceiveAddress umsMemberReceiveAddress1 = addressMapper.selectOne(umsMemberReceiveAddress);
+        return umsMemberReceiveAddress1;
     }
 
     private UmsMember loginFromDB(UmsMember umsMember) {

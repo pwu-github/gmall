@@ -2,31 +2,36 @@ SOA架构(面向服务架构)
 简单理解：https://blog.csdn.net/qq_41723615/article/details/90201139
 
 #用户模块
-1、用户模块服务端(service)：gmall-user-service serer-port:8070
-2、用户模块web端(controller)：gmall-user-web server-port:8080
+1、gmall-user-service     server-port: 8070
+2、gmall-user-web         server-port: 8080
 
-#后台管理系统是给商家录入商品基本信息使用
-1、后台管理系统服务端(service)：gmall-manage-service serer-port:8071
-2、后台管理系统web端(controller)：gmall-manage-web server-port:8081
+#后台管理系统
+给商家录入商品基本信息使用
+1、gmall-manage-service   server-port: 8071
+2、gmall-manage-web       server-port: 8081
 3、后台管理系统前端工程: 进入gmall-admin目录，cmd运行 npm run dev 命令
 注：右键 cmd 窗口，调出属性设置。一定要把  快速编辑模式 去掉
 
-#商品详情页面
-1、gmall-item-service  serer-port:8072 (实际上不需要这个模块)
+#商品详情
+1、gmall-item-service     server-port: 8072 (实际上不需要这个模块)
 (商品详情页的数据通过spuService和skuService就可以获取，也就是说gmall-manage-service就可以实现,这也是为什么要服务拆分，面向服务)
-2、gmall-item-web      serer-port:8082
+2、gmall-item-web         server-port: 8082
 
 #搜索模块
-1、gmall-search-service  server-port：8073
-2、gmall-search-web      server-port：8083
+1、gmall-search-service   server-port：8073
+2、gmall-search-web       server-port：8083
 
 #购物车模块
-1、gmall-cart-service    server-port：8074
-2、gmall-cart-web        server-port：8084
+1、gmall-cart-service     server-port：8074
+2、gmall-cart-web         server-port：8084
 
-#用户认证中心服务
+#用户认证中心
 1、gmall-passport-service server-port：8075 (实际上不需要这个模块，用gmall-user-service即可)
 2、gmall-passport-web     server-port：8085
+
+#订单模块
+1、gmall-order-service    server-port：8076
+2、gmall-order-web        server-port：8086
 
 #注册中心
 dubbo管理页面: http://192.168.253.131:8080/dubbo     user/pass : root/root
@@ -132,7 +137,7 @@ http://192.168.253.131:5601/app/kibana#/dev_tools/console?_g=()
 将127.0.0.1 localhost 映射为指定的域名
 打开C:\Windows\System32\drivers\etc 下的hosts文件
 如下配置即可： 127.0.0.1      localhost   user.gmall.com
-配置成功，即可用 user.gmall.com:port 访问本地启动的服务
+配置成功，在cmd命令行，输入 ipconfig /flushdns ,刷新DNS，即可用 user.gmall.com:port 访问本地启动的服务
 可以进一步用Nginx代理端口号，实现用user.gmall.com直接访问
 
 #常见的错误

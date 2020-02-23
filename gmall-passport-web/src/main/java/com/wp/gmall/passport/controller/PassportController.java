@@ -77,7 +77,7 @@ public class PassportController {
         umsMember1.setSourceUid(umsMember.getSourceUid());
         UmsMember umsMember2 = userService.checkAutho2User(umsMember1);
         if (umsMember2 == null) {
-            userService.addAuthoUser(umsMember);
+            umsMember = userService.addAuthoUser(umsMember);
         } else {
             umsMember = umsMember2;
         }

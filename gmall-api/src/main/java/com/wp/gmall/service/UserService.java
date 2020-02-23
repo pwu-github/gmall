@@ -16,7 +16,9 @@ public interface UserService {
 
     void addUserToken(String token, String memberId);
 
-    void addAuthoUser(UmsMember umsMember);
+    UmsMember addAuthoUser(UmsMember umsMember);
 
     UmsMember checkAutho2User(UmsMember umsMember);
+
+    UmsMemberReceiveAddress getAddressById(String addressId);
 }

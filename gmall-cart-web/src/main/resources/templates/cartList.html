@@ -168,15 +168,15 @@
 <script type="text/javascript">
 
      function toTrade(){
-         window.location.href="http://localhost:8084/toTrade";
+         window.location.href="http://order.gmall.com:8086/toTrade";
     }
     function toItem(skuId) {
-        window.location.href="http://localhost:8082/"+skuId+".html";
+        window.location.href="http://item.gmall.com:8082/"+skuId+".html";
     }
 
     function login(){
-      var s = encodeURIComponent("http://localhost:8084/cartList");
-       window.location.href="http://localhost:8085/index?originUrl="+s;
+      var s = encodeURIComponent("http://cart.gmall.com:8084/cartList");
+       window.location.href="http://passport.gmall.com:8085/index?originUrl="+s;
     }
 
     function checkSku( chkbox){

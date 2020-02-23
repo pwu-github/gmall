@@ -37,16 +37,6 @@ public class CartController {
     @Reference
     private CartService cartService;
 
-    //结算 测试
-    @RequestMapping("/toTrade")
-    @LoginRequired(loginSuccess = true)
-    public String toTrade(HttpServletRequest request, ModelMap modelMap) {
-
-        String memberId = (String) request.getAttribute("memberId");
-        String nickname = (String) request.getAttribute("nickname");
-        return "toTrade";
-    }
-
     //购物车列表
     @RequestMapping("/cartList")
     @LoginRequired(loginSuccess = false)

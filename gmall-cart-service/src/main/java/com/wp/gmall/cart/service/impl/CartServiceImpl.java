@@ -93,4 +93,11 @@ public class CartServiceImpl implements CartService {
         //同步缓存
         flushCartCache(omsCartItem.getMemberId());
     }
+
+    @Override
+    public void delCartskuById(String productSkuId) {
+        OmsCartItem omsCartItem = new OmsCartItem();
+        omsCartItem.setProductSkuId(productSkuId);
+        omsCartItemMapper.delete(omsCartItem);
+    }
 }
