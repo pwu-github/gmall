@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
@@ -45,7 +46,7 @@ public class OrderController {
     //提交订单
     @RequestMapping("/submitOrder")
     @LoginRequired(loginSuccess = true)
-    public String submitOrder(String addressId,BigDecimal totalAmount,String tradeCode,HttpServletRequest request, ModelMap modelMap) {
+    public ModelAndView submitOrder(String addressId, BigDecimal totalAmount, String tradeCode, HttpServletRequest request, ModelMap modelMap) {
         String memberId = (String) request.getAttribute("memberId");
         String nickname = (String) request.getAttribute("nickname");
         //校验交易码
@@ -88,7 +89,8 @@ public class OrderController {
                     //检验价格,订单列表中的每一个item都需要核验价格
                     boolean b = skuService.checkPrice(omsCartItem.getProductSkuId(),omsCartItem.getPrice());
                     if(b == false){
-                        return "tradeFail";
+                        ModelAndView modelAndView = new ModelAndView("tradeFail");
+                        return modelAndView;
                     }
                     //设置订单列表商品属性
                     omsOrderItem.setProductPic(omsCartItem.getProductPic());
@@ -108,13 +110,17 @@ public class OrderController {
                 }
             }
             omsOrder.setOmsOrderItems(omsOrderItems);
+            //保存订单
             orderService.saveOrder(omsOrder);
             //跳转到支付系统
+            ModelAndView modelAndView = new ModelAndView("redirect:http://payment.gmall.com:8087");
+            modelAndView.addObject("outTradeNo",outTradeNo);
+            modelAndView.addObject("totalAmount",totalAmount);
+            return modelAndView;
         }else{
-            return "tradeFail";
+            ModelAndView modelAndView = new ModelAndView("tradeFail");
+            return modelAndView;
         }
-
-        return null;
     }
 
     //结算

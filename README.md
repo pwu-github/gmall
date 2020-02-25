@@ -33,6 +33,9 @@ SOA架构(面向服务架构)
 1、gmall-order-service    server-port：8076
 2、gmall-order-web        server-port：8086
 
+#支付模块
+gmall-payment             server-port：8087
+
 #注册中心
 dubbo管理页面: http://192.168.253.131:8080/dubbo     user/pass : root/root
 1、启动dubbo和zookeeper服务(已经设置为开机自启，如果服务启动失败，需要手动启动)：
@@ -137,8 +140,9 @@ http://192.168.253.131:5601/app/kibana#/dev_tools/console?_g=()
 将127.0.0.1 localhost 映射为指定的域名
 打开C:\Windows\System32\drivers\etc 下的hosts文件
 如下配置即可： 127.0.0.1      localhost   user.gmall.com
-配置成功，在cmd命令行，输入 ipconfig /flushdns ,刷新DNS，即可用 user.gmall.com:port 访问本地启动的服务
+配置成功，管理员打开cmd命令行，输入 ipconfig /flushdns ,刷新DNS，即可用 user.gmall.com:port 访问本地启动的服务
 可以进一步用Nginx代理端口号，实现用user.gmall.com直接访问
+当配置过多的域名时，可能会解析失败，把解析失败的域名位置往前调整，直到每一个域名都能被解析出来
 
 #常见的错误
 1、serviceImpl没有加@Service注解（dubbo包）
