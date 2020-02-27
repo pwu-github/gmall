@@ -35,6 +35,7 @@ SOA架构(面向服务架构)
 
 #支付模块
 gmall-payment             server-port：8087
+支付模块涉及到金钱交易，所以service和web在一个服务中，支付service只会在支付web层被调用，不会给其他系统调用。
 
 #注册中心
 dubbo管理页面: http://192.168.253.131:8080/dubbo     user/pass : root/root
@@ -84,6 +85,16 @@ nohup ./kibana &
 2、查看kibana进程
 ps -ef | grep node
 
+#activeMq
+1、启动、关闭
+service activemq start
+service activemq stop
+2、启动消费端
+service activemq start
+3、访问http://192.168.253.131:8161/    admin/admin
+4、windows启动
+D:\BaiduNetdiskDownload\《谷粒商城》\谷粒商城开发工具\apache-activemq-5.12.0-bin\apache-activemq-5.12.0\bin
+cmd ： activemq start
 
 #存储sku信息
 http://192.168.253.131:5601/app/kibana#/dev_tools/console?_g=()
@@ -151,7 +162,7 @@ http://192.168.253.131:5601/app/kibana#/dev_tools/console?_g=()
 
 4、端口没有开放
 检查端口是否开放：https://www.cnblogs.com/sxmny/p/11224842.html
-开放端口：firewall-cmd --zone=public --add-port=5601/tcp --permanent
+开放端口：firewall-cmd --zone=public --add-port=61616/tcp --permanent
 重启防火墙：firewall-cmd --reload
 
 5、如果遇到thymeleaf解析HTML问题，可在pom文件中加入如下依赖，并在properties配置文件中加入

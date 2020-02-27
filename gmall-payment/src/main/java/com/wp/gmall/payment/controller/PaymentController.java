@@ -118,6 +118,8 @@ public class PaymentController {
         paymentInfo.setSubject("gmall商城");
         paymentInfo.setTotalAmount(totalAmount);
         paymentService.savePaymentInfo(paymentInfo);
+
+        paymentService.sendDelayPaymentResultCheckQueue(outTradeNo,5);
         return form;
     }
 }
